@@ -1,18 +1,20 @@
 var fs = require('fs');
 var cmudictFile = readCmudictFile('./cmudict.txt');
+var wordArrays = formatData(cmudictFile);
+
 
 function readCmudictFile(file){
 	return fs.readFileSync(file).toString();
 }
 
+//takes the corpus, in string format, and returns an array of arrays,
+//each containing 1) the (cleaned up) word, and 2) it's syllable count
 function formatData(data){
 	var lines = data.split("\n");
 
 	return lines.map(function(line){
 		 return wordFormat(line.split(" "));
-
 	});
-
 }
 
 //take a wordArray and return a two-element array:
@@ -29,10 +31,8 @@ function wordFormat(wordArray){
 	return [word, syl];
 }
 
-
-var wordArrays = formatData(cmudictFile);
-
-
+//an array of arrays, each of which contains the words whose syllable
+//count corresponds to the index of that array
 function createSylArray(wordArrays){
 	var syllablesArray = [];
 	wordArrays.forEach(function(wordArray){
@@ -53,7 +53,6 @@ var syllablesArray = createSylArray(wordArrays);
 
 
 function createHaiku(structure){
-
 	if (Array.isArray(structure[0])){
 		return createRigidHaiku(structure);
 	}
@@ -91,6 +90,8 @@ function createRigidHaiku(structure){
 }
 
 
+
+//here's a sample:
 createHaiku([5,7,5]);
 
 
